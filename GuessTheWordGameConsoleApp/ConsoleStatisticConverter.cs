@@ -19,10 +19,14 @@ class ConsoleStatisticConverter : IStatisticConverter
         {
             incorrectGuessedWordsStr.Append($"{incorrectGuessedWord}, ");
         }
-        Console.WriteLine($"\n-------------------!GAME FINISHED!------------------------\nYour statistic: \n\n" +
-            $" failed attempts: {userStatistic.failedAttemptsCount}\n" +
-            $" guessed word: {userStatistic.guessedWord}\n" +
-            $" incorrectGuessedWordsStr: {incorrectGuessedWordsStr.ToString() ?? "0"}\n" +
-            $"----------------------------------------------------------");
+        var statisticToDisplay = $"""
+            -------------------!GAME FINISHED!------------------------
+            Your statistic: 
+             failed attempts: {userStatistic.failedAttemptsCount}
+             guessed word: {userStatistic.guessedWord}
+             incorrectGuessedWordsStr: {incorrectGuessedWordsStr.ToString() ?? "0"}
+            ---------------------------------------------------------- 
+            """;
+        Console.WriteLine(statisticToDisplay);
     }
 }

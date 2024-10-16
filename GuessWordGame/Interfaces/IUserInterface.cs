@@ -5,14 +5,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GuessWordGames.Interfaces
+namespace GuessWordGames.Interfaces;
+
+public interface IUserInterface
 {
-    public interface IUserInterface
-    {
-        string inputWord { get; set; }
-        void Greet();
-        void AskMove();
-        void CongratulateOnSuccessfulAttempt();
-        void InformAboutWrongAnswere();
-    }
+    void Greet();
+    //List<string> GetUserWordsToGuess();
+    string UserMove();
+    void CongratulateOnSuccessfulAttempt();
+    void InformAboutWrongAnswer();
+    IInputUserData GetInputData();
 }

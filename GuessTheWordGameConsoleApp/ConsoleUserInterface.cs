@@ -1,21 +1,20 @@
 ﻿using GuessWordGames.Interfaces;
-using GuessWordGames.Models.Components.Statistics.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GuessTheWordGameConsoleApp;
-
 class ConsoleUserInterface : IUserInterface
 {
+    private List<string> ConvertWordsToList(string words)
+    {
+        var wordsArray = words.Split(',');
+        return wordsArray.ToList();
+    }
     public string inputWord {  get; set; }
 
-    public void AskMove()
+    public string UserMove()
     {
         Console.WriteLine("Guess the word >>> ");
         inputWord = Console.ReadLine();
+        return inputWord;
     }
 
     public void CongratulateOnSuccessfulAttempt()
@@ -25,11 +24,28 @@ class ConsoleUserInterface : IUserInterface
 
     public void Greet()
     {
-        Console.WriteLine("Hi! Welcome to the guess word game! ");
+        Console.WriteLine("""
+            Hi! Welcome to the guess word game! 
+            Enter words separated by coma (,) and program choose one random word
+         """);
     }
 
-    public void InformAboutWrongAnswere()
+    public void InformAboutWrongAnswer()
     {
         Console.WriteLine("Incorrect! Try again!");
+    }
+
+    public List<string> GetUserWordsToGuess()
+    {
+        Console.WriteLine("Enter wordsList that you what to guess: ");
+        string words = Console.ReadLine();
+        var wordsList = ConvertWordsToList(words);
+        return wordsList;
+
+    }
+
+    public IInputUserData GetInputData()
+    {
+        
     }
 }

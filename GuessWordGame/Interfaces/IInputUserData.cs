@@ -8,7 +8,6 @@ namespace GuessWordGames.Interfaces
 {
     public interface IInputUserData
     {
-        //string WordToGuess { get; set; }
-        IList<string> GetGeneralWords();
+        IList<string> GetWordsToGuess();
     }
 }

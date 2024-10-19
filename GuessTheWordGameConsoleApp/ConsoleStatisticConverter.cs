@@ -13,7 +13,7 @@ class ConsoleStatisticConverter : IStatisticConverter
     public void ShowConvertedStatistics(IUserStatistic userStatistic)
     {
         StringBuilder incorrectGuessedWordsStr = new StringBuilder();
-        var incorrectGuessedWords = userStatistic.incorrectGuessedWords;
+        var incorrectGuessedWords = userStatistic.IncorrectGuessedWords;
 
         foreach (var incorrectGuessedWord in incorrectGuessedWords)
         {
@@ -22,8 +22,8 @@ class ConsoleStatisticConverter : IStatisticConverter
         var statisticToDisplay = $"""
             -------------------!GAME FINISHED!------------------------
             Your statistic: 
-             failed attempts: {userStatistic.failedAttemptsCount}
-             guessed word: {userStatistic.guessedWord}
+             failed attempts: {userStatistic.FailedAttemptsCount}
+             guessed word: {userStatistic.GuessedWord}
              incorrectGuessedWordsStr: {incorrectGuessedWordsStr.ToString() ?? "0"}
             ---------------------------------------------------------- 
             """;

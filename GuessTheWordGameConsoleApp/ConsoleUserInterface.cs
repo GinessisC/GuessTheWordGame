@@ -5,12 +5,12 @@ class ConsoleUserInterface : IUserInterface
 {
     private List<string> ConvertWordsToList(string words)
     {
-        var wordsArray = words.Split(',');
+        var wordsArray = words.Split(", ");
         return wordsArray.ToList();
     }
     public string inputWord {  get; set; }
 
-    public string UserMove()
+    public string GetUserWordAttempt()
     {
         Console.WriteLine("Guess the word >>> ");
         inputWord = Console.ReadLine();
@@ -46,6 +46,10 @@ class ConsoleUserInterface : IUserInterface
 
     public IInputUserData GetInputData()
     {
-        
+        string wordsToGuess = Console.ReadLine();
+        var wordsToGuessList = ConvertWordsToList(wordsToGuess);
+        var data = new ConsoleInputData(wordsToGuessList);
+
+        return data;
     }
 }

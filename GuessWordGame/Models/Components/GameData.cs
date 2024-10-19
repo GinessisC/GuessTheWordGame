@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace GuessWordGames.Models.Components
 {
-    internal class GameData
+    public class GameData
     {
         public bool isContinue = true;
         public string wordToGuess = string.Empty;

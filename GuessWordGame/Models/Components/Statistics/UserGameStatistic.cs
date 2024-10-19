@@ -9,21 +9,21 @@ namespace GuessWordGames.Models.Components.Statistics
 {
     class UserGameStatistic : IUserStatistic
     {
-        public WordsToGuess incorrectGuessedWords { get; set; }
-        public int failedAttemptsCount { get; set; } = 0;
-        public string guessedWord { get; set; } = string.Empty;
+        public WordsToGuess IncorrectGuessedWords { get; set; }
+        public int FailedAttemptsCount { get; set; } = 0;
+        public string GuessedWord { get; set; } = string.Empty;
 
         public UserGameStatistic(WordsToGuess incorrectGuessedWords,
             int failedAttemptsCount,
             string guessedWord)
         {
-            this.incorrectGuessedWords = incorrectGuessedWords;
-            this.failedAttemptsCount = failedAttemptsCount;
-            this.guessedWord = guessedWord;
+            this.IncorrectGuessedWords = incorrectGuessedWords;
+            this.FailedAttemptsCount = failedAttemptsCount;
+            this.GuessedWord = guessedWord;
         }
         public UserGameStatistic(WordsToGuess incorrectGuessedWords)
         {
-            this.incorrectGuessedWords = incorrectGuessedWords;
+            this.IncorrectGuessedWords = incorrectGuessedWords;
         }
 
     }

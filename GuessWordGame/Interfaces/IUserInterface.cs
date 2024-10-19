@@ -10,8 +10,7 @@ namespace GuessWordGames.Interfaces;
 public interface IUserInterface
 {
     void Greet();
-    //List<string> GetUserWordsToGuess();
-    string UserMove();
+    string GetUserWordAttempt();
     void CongratulateOnSuccessfulAttempt();
     void InformAboutWrongAnswer();
     IInputUserData GetInputData();

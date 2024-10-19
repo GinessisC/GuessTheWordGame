@@ -2,50 +2,24 @@ using GuessWordGames.Models;
 using System.Collections;
 using NSubstitute;
 using GuessWordGames.Interfaces;
+using GuessWordGames.Models.Components;
 
 namespace GuessWordGames.Test;
 public class GuessWordGameTest
 {
-    private const string wrongAnswereResponse = "is incorrect! Try again!";
-    private const string rightAnswereResponse = "You have guessed the word!";
-
-
-    public void M()
+    [Theory]
+    [InlineData("test")]
+    public void GetUserWordAttempt_word_(string word)
     {
-        var calculator = Substitute.For<IUserInterface>();
+        //Arrange
+        var userInterface = Substitute.For<IUserInterface>();
+        WordsToGuess words = new WordsToGuess(new List<string>() { "test"});
+        GameData gameData = new GameData(words);
+
+        //Act
+
+        //Assert
+        Assert.Equal("test", word);
     }
     
-
-    //[Theory]
-    //[InlineData("not true word")]
-    //[InlineData("happy")]
-    //[InlineData("Random")]
-
-    //public void SetUpGuessGame_InputWord_WorngAnswers(string inputWord)
-    //{
-    //    //Arrange
-    //    GuessWordGame guessWordGame = new();
-
-    //    //Act
-    //    string resultOfGuessGame = guessWordGame.SetUpGuessGame(inputWord);
-
-    //    //Assert
-    //    Assert.Contains(wrongAnswereResponse, resultOfGuessGame);
-    //}
-
-    //[Theory]
-    //[InlineData("wordsList")]
-    //[InlineData("mmm")]
-    //[InlineData("test")]
-    //public void SetUpGuessGame_InputWord_RightAnswers(string inputWord)
-    //{
-    //    //Arrange
-    //    GuessWordGame guessWordGame = new(inputWord);
-
-    //    //Act
-    //    string resultOfGuessGame = guessWordGame.SetUpGuessGame(inputWord);
-
-    //    //Assert
-    //    Assert.Contains(rightAnswereResponse, resultOfGuessGame);
-    //}
 }

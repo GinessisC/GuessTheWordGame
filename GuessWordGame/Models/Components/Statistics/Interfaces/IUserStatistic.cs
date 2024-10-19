@@ -8,8 +8,8 @@ namespace GuessWordGames.Models.Components.Statistics.Interfaces
 {
     public interface IUserStatistic
     {
-        WordsToGuess incorrectGuessedWords { get; set; }
-        int failedAttemptsCount { get; set; }
-        string guessedWord { get; set; }
+        WordsToGuess IncorrectGuessedWords { get; set; }
+        int FailedAttemptsCount { get; set; }
+        string GuessedWord { get; set; }
     }
 }

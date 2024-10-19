@@ -9,9 +9,16 @@ public class GuessWordGame
 {
     private GameData _gameData;
     private readonly IUserInterface _userInterface;
-    private IStatisticConverter _statisticConverter;
+    private readonly IStatisticConverter _statisticConverter;
     private UserGameStatistic _userGameStatistic;
-
+    public GuessWordGame(IUserInterface userInterface,
+         IStatisticConverter statisticConverter, 
+         GameData gameData)
+    {
+        _gameData = gameData;
+        _userInterface = userInterface;
+        _statisticConverter = statisticConverter;
+    }
     public GuessWordGame(IUserInterface userInterface,
          IStatisticConverter statisticConverter)
     {
@@ -28,38 +35,53 @@ public class GuessWordGame
     private void GameProcess()
     {
         var userInputData = _userInterface.GetInputData();
-
-        var wordsToGuess = new WordsToGuess(userInputData.GetGeneralWords().ToList());
-        
+        var wordsToGuess = new WordsToGuess(userInputData.GetWordsToGuess().ToList());
         var inputWord = string.Empty;
 
-        _gameData = new GameData(wordsToGuess);
-        _userGameStatistic = new(new WordsToGuess(new List<string>()));
-        _userGameStatistic.incorrectGuessedWords = new(new List<string>() { });
+        DefineWords(wordsToGuess);
+        DefineStatisticsData();
 
         while (_gameData.isContinue)
         {
-            inputWord = _userInterface.UserMove();
+            inputWord = _userInterface.GetUserWordAttempt();
             if (IsWordGuessed(inputWord))
             {
-                _userGameStatistic.guessedWord = inputWord;
-                
-                _userInterface.CongratulateOnSuccessfulAttempt();
-                _gameData.isContinue = false;
-                _statisticConverter.ShowConvertedStatistics(_userGameStatistic);
-                
+                _userGameStatistic.GuessedWord = inputWord;
+                EndGame();
                 break;
             }
             else
             {
-                _userInterface.InformAboutWrongAnswer();
-                _userGameStatistic.incorrectGuessedWords.Add(inputWord);
-                _userGameStatistic.failedAttemptsCount++;
+                DoInCaseOfFailAttempt(inputWord);
                 continue;
             }
         }
     }
-    
+    private void EndGame()
+    {
+        _userInterface.CongratulateOnSuccessfulAttempt();
+        _gameData.isContinue = false;
+        _statisticConverter.ShowConvertedStatistics(_userGameStatistic);
+    }
+    private void DoInCaseOfFailAttempt(string inputWord)
+    {
+        _userInterface.InformAboutWrongAnswer();
+        _userGameStatistic.IncorrectGuessedWords.Add(inputWord);
+        _userGameStatistic.FailedAttemptsCount++;
+    }
+    private void DefineWords(WordsToGuess words)
+    {
+        if (_gameData == null)
+        {
+            _gameData = new GameData(words);
+        }
+        
+    }
+    private void DefineStatisticsData()
+    {
+        _userGameStatistic = new(new WordsToGuess(new List<string>()));
+        _userGameStatistic.IncorrectGuessedWords = new(new List<string>() { });
+    }
     private void StartGame()
     {
         _userInterface.Greet();

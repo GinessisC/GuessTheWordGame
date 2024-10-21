@@ -7,7 +7,7 @@ namespace GuessWordGames.Models;
 public class GuessWordGameSession
 {
     private bool _isFinished = false;
-    private GameWordsHandler _gameWordsToGuess;
+    public GameWordsHandler _gameWordsToGuess;
     private readonly IUserInterface _userInterface;
     List<UserAttempt> userAttempts = new() { };
 

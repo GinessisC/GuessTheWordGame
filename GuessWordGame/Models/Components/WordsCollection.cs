@@ -7,15 +7,15 @@ using System.Threading.Tasks;
 
 namespace GuessWordGames.Models.Components;
 
-public class WordsToGuess : List<string>
+public class WordsCollection : List<Word>
 {
-    public List<string> wordsList = new List<string>();
-    public WordsToGuess()
+    public List<Word> wordsList = new List<Word>();
+    public WordsCollection()
     {
         
     }
-    public WordsToGuess(List<string> words)
+    public WordsCollection(List<Word> words)
     {
-        this.wordsList = words;
+        this.wordsList = words;  
     }
 }

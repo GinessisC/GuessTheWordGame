@@ -1,9 +1,10 @@
 ﻿using GuessTheWordGameConsoleApp;
+using GuessTheWordGameConsoleApp.DisplaySettings;
 using GuessWordGames;
 using GuessWordGames.Models;
 
-var consoleStatisticConverter = new ConsoleStatisticConverter();
 var consoleUserInterface = new ConsoleUserInterface();
-GuessWordGame guessWordGame = new(consoleUserInterface, consoleStatisticConverter);
+ConsoleGameMessagesDisplayer displayer = new();
 
-guessWordGame.LaunchGame();
+GuessGameSessionsHandler games = new(consoleUserInterface, displayer);
+games.SetUpGamePool();

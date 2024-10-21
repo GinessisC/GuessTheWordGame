@@ -1,17 +1,12 @@
-﻿using GuessWordGames.Models.Components.Statistics.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using GuessWordGames.Models.Components;
 
 namespace GuessWordGames.Interfaces;
-
 public interface IUserInterface
 {
-    void Greet();
-    string GetUserWordAttempt();
-    void CongratulateOnSuccessfulAttempt();
-    void InformAboutWrongAnswer();
-    IInputUserData GetInputData();
+    void WhenWordIsAbove(Word userWord);
+    void WhenWordIsBelow(Word userWord);
+    void WhenWordIsNotFound(Word userWord);
+    void WhenWordIsGuessed(Word userWord);
+    Word GetUserWordAttempt();
+    WordsCollection GetWordsToGuess();
 }

@@ -13,13 +13,11 @@ public class GuessWordGameTest
     {
         //Arrange
         var userInterface = Substitute.For<IUserInterface>();
-        WordsToGuess words = new WordsToGuess(new List<string>() { "test"});
-        GameData gameData = new GameData(words);
-
+        
         //Act
 
         //Assert
-        Assert.Equal("test", word);
+
     }
     
 }

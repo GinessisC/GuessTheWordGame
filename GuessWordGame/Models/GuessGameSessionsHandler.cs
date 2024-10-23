@@ -1,5 +1,6 @@
 ﻿using GuessWordGames.Interfaces;
 using GuessWordGames.Models.Components;
+using GuessWordGames.Models.Components.Modules.RandomModules;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,8 +14,12 @@ public class GuessGameSessionsHandler
     private bool _isContinue = true;
     private readonly IUserInterface _userInterface;
     private readonly IGameMessagesDisplayer _gameMessagesDisplayer;
-    public GuessGameSessionsHandler(IUserInterface userInterface, IGameMessagesDisplayer gameMessagesDisplayer)
+    private readonly IRandomProvider _randomProvider;
+    public GuessGameSessionsHandler(IUserInterface userInterface,
+        IGameMessagesDisplayer gameMessagesDisplayer,
+        IRandomProvider randomProvider)
     {
+        _randomProvider = randomProvider;
         _gameMessagesDisplayer = gameMessagesDisplayer;
         _userInterface = userInterface; 
     }
@@ -32,7 +37,8 @@ public class GuessGameSessionsHandler
     }
     private GuessWordGameSession CreateGame()
     {
-        var game = new GuessWordGameSession(_userInterface);
+        
+        var game = new GuessWordGameSession(_userInterface, _randomProvider);
         return game;
     }
 }

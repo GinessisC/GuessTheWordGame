@@ -5,6 +5,7 @@ using GuessWordGames.Models;
 
 var consoleUserInterface = new ConsoleUserInterface();
 ConsoleGameMessagesDisplayer displayer = new();
+RandomProvider randomProvider = new();
 
-GuessGameSessionsHandler games = new(consoleUserInterface, displayer);
+GuessGameSessionsHandler games = new(consoleUserInterface, displayer, randomProvider);
 games.SetUpGamePool();

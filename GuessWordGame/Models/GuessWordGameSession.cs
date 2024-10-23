@@ -6,14 +6,15 @@ using GuessWordGames.Models.Components.Modules.WordPosition;
 namespace GuessWordGames.Models;
 public class GuessWordGameSession
 {
+    private IRandomProvider _randomProvider;
     private bool _isFinished = false;
-    public GameWordsHandler _gameWordsToGuess;
+    private GameWordsHandler _gameWordsToGuess;
     private readonly IUserInterface _userInterface;
     List<UserAttempt> userAttempts = new() { };
 
-    public GuessWordGameSession(IUserInterface userInterface)
+    public GuessWordGameSession(IUserInterface userInterface, IRandomProvider randomProvider)
     {
-        RandomProvider randomProvider = new();
+        _randomProvider = randomProvider;
 
         var words = userInterface.GetWordsToGuess();
         _gameWordsToGuess = new(words, randomProvider);

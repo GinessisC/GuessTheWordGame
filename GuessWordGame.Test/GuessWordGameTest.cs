@@ -1,107 +1,106 @@
-using GuessWordGames.Models;
-using System.Collections;
-using NSubstitute;
-using GuessWordGames.Interfaces;
-using GuessWordGames.Models.Components;
-using GuessWordGames.Models.Components.Modules.RandomModules;
 using System.ComponentModel;
+using GuessWordGames.Interfaces;
+using GuessWordGames.Models;
+using GuessWordGames.Models.Components;
+using NSubstitute;
+using NSubstitute.Core;
 
-namespace GuessWordGames.Test;
+namespace GuessWordGame.Test;
+
 public class GuessWordGameTest
 {
-    private static int _guessedWordIndex = 2;
-    private static int _nonGuessedWordIndex = 0;
+	private const int GuessedWordIndex = 2;
+	private const int NonGuessedWordIndex = 0;
 
-    private static List<Word> _wordsValues = new List<Word>()
-    {
-        new Word("test"),
-        new Word("value"),
-        new Word("was added")
+	private static readonly List<Word> _wordsValues =
+	[
+		new("test"),
+		new("value"),
+		new("was added")
+	];
 
-    };
-    private static WordsCollection _words = new(_wordsValues);
+	private static readonly WordsCollection _words = new(_wordsValues);
 
-    [Fact]
-    [DisplayName("not successful attempt where input word in lower")]
-    public void NonSuccessfulCase()
-    {
-        //Arrange
-        var userInterface = Substitute.For<IUserInterface>();
-        var randomProvider = Substitute.For<IRandomProvider>();
-        var messagesDisplayer = Substitute.For<IGameMessagesDisplayer>();
+	[Fact]
+	[DisplayName("not successful attempt where input word in lower")]
+	public void NonSuccessfulCase()
+	{
+		//Arrange
+		IUserInterface? userInterface = Substitute.For<IUserInterface>();
+		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
+		IGameMessagesDisplay? gameMessagesDisplayer = Substitute.For<IGameMessagesDisplay>();
+		
+		ConfiguredCall? randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(NonGuessedWordIndex);
+		userInterface.GetWordsToGuess().Returns(_words);
+		userInterface.GetUserWordAttempt().Returns(_wordsValues[NonGuessedWordIndex]);
+		gameMessagesDisplayer.AskIsContinue().Returns(false);
 
-        var randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(_nonGuessedWordIndex);
-        userInterface.GetWordsToGuess().Returns(_words);
-        userInterface.GetUserWordAttempt().Returns(_wordsValues[_nonGuessedWordIndex]);
-        messagesDisplayer.AskIsContinue().Returns(false);
+		GuessGameSessionsHandler sessionsHandler = new(userInterface, gameMessagesDisplayer, randomProvider);
 
-        GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayer, randomProvider);
-        //Act
+		//Act
 
-        sessionsHandler.SetUpGamePool();
-        //Assert
-        userInterface.Received(1).WhenWordIsBelow(_wordsValues[_guessedWordIndex]);
-        userInterface.Received(1).GetUserWordAttempt();
-        userInterface.DidNotReceive().WhenWordIsAbove(_wordsValues[_guessedWordIndex]);
-        userInterface.DidNotReceive().WhenWordIsNotFound(_wordsValues[_guessedWordIndex]);
-        userInterface.DidNotReceive().WhenWordIsGuessed(_wordsValues[_guessedWordIndex]);
+		sessionsHandler.SetUpGamePool();
 
+		//Assert
+		userInterface.Received(1).WhenWordIsBelow(_wordsValues[GuessedWordIndex]);
+		userInterface.Received(1).GetUserWordAttempt();
+		userInterface.DidNotReceive().WhenWordIsAbove(_wordsValues[GuessedWordIndex]);
+		userInterface.DidNotReceive().WhenWordIsNotFound(_wordsValues[GuessedWordIndex]);
+		userInterface.DidNotReceive().WhenWordIsGuessed(_wordsValues[GuessedWordIndex]);
+	}
 
-    }
+	[Fact]
+	[DisplayName("successful attempt: 1 try")]
+	public void SuccessfulCase()
+	{
+		//Arrange
+		IUserInterface? userInterface = Substitute.For<IUserInterface>();
+		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
+		IGameMessagesDisplay? messagesDisplayer = Substitute.For<IGameMessagesDisplay>();
 
-    [Fact]
-    [DisplayName("successful attempt: 1 try")]
-    public void SuccessfulCase()
-    {
-        //Arrange
-        var userInterface = Substitute.For<IUserInterface>();
-        var randomProvider = Substitute.For<IRandomProvider>();
-        var messagesDisplayer = Substitute.For<IGameMessagesDisplayer>();
+		ConfiguredCall? randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(GuessedWordIndex);
+		userInterface.GetWordsToGuess().Returns(_words);
+		userInterface.GetUserWordAttempt().Returns(_wordsValues[GuessedWordIndex]);
+		messagesDisplayer.AskIsContinue().Returns(false);
 
-        var randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(_guessedWordIndex);
-        userInterface.GetWordsToGuess().Returns(_words);
-        userInterface.GetUserWordAttempt().Returns(_wordsValues[_guessedWordIndex]);
-        messagesDisplayer.AskIsContinue().Returns(false);
+		GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayer, randomProvider);
 
-        GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayer, randomProvider);
-        //Act
+		//Act
 
-        sessionsHandler.SetUpGamePool();
-        //Assert
-        userInterface.Received(1).GetWordsToGuess();
-        userInterface.Received(1).GetUserWordAttempt();
-        userInterface.DidNotReceive().WhenWordIsAbove(_wordsValues[_guessedWordIndex]);
-        userInterface.DidNotReceive().WhenWordIsBelow(_wordsValues[_guessedWordIndex]);
-        userInterface.DidNotReceive().WhenWordIsNotFound(_wordsValues[_guessedWordIndex]);
-    }
+		sessionsHandler.SetUpGamePool();
 
-    [Fact]
-    [DisplayName("To test messages displaying")]
-    public void DisplayGameMessages()
-    {
-        //Arrange
-        var userInterface = Substitute.For<IUserInterface>();
-        var randomProvider = Substitute.For<IRandomProvider>();
-        var messagesDisplayer = Substitute.For<IGameMessagesDisplayer>();
+		//Assert
+		userInterface.Received(1).GetWordsToGuess();
+		userInterface.Received(1).GetUserWordAttempt();
+		userInterface.DidNotReceive().WhenWordIsAbove(_wordsValues[GuessedWordIndex]);
+		userInterface.DidNotReceive().WhenWordIsBelow(_wordsValues[GuessedWordIndex]);
+		userInterface.DidNotReceive().WhenWordIsNotFound(_wordsValues[GuessedWordIndex]);
+	}
 
-        var randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(_guessedWordIndex);
-        messagesDisplayer.AskIsContinue().Returns(false);
-        userInterface.GetWordsToGuess().Returns(_words);
-        userInterface.GetUserWordAttempt().Returns(_wordsValues[_guessedWordIndex]);
+	[Fact]
+	[DisplayName("To test messages displaying")]
+	public void DisplayGameMessages()
+	{
+		//Arrange
+		IUserInterface? userInterface = Substitute.For<IUserInterface>();
+		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
+		IGameMessagesDisplay? messagesDisplayer = Substitute.For<IGameMessagesDisplay>();
 
-        GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayer, randomProvider);
+		ConfiguredCall? randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(GuessedWordIndex);
+		messagesDisplayer.AskIsContinue().Returns(false);
+		userInterface.GetWordsToGuess().Returns(_words);
+		userInterface.GetUserWordAttempt().Returns(_wordsValues[GuessedWordIndex]);
 
-        //Act
-        sessionsHandler.SetUpGamePool();
+		GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayer, randomProvider);
 
-        //Assert
-        messagesDisplayer.Received(1).ShowGreetMessage();
-        messagesDisplayer.Received(1).ShowExitMessage();
+		//Act
+		sessionsHandler.SetUpGamePool();
 
-        //userInterface.Received(1).GetWordsToGuess();
-        //userInterface.Received(1).GetUserWordAttempt();
+		//Assert
+		messagesDisplayer.Received(1).ShowGreetMessage();
+		messagesDisplayer.Received(1).ShowExitMessage();
 
-
-    }
-
+		//userInterface.Received(1).GetWordsToGuess();
+		//userInterface.Received(1).GetUserWordAttempt();
+	}
 }

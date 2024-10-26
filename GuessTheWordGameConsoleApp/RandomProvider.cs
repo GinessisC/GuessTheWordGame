@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using GuessWordGames.Models.Components.Modules.RandomModules;
+﻿using GuessWordGames.Interfaces;
 
 namespace GuessTheWordGameConsoleApp;
 
-class RandomProvider : IRandomProvider
+internal class RandomProvider : IRandomProvider
 {
-    public int Next(int minValue, int maxValue)
-    {
-        return Random.Shared.Next(minValue, maxValue);
-    }
+	public int Next(int minValue, int maxValue)
+	{
+		return Random.Shared.Next(minValue, maxValue);
+	}
 }

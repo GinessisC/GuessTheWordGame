@@ -10,11 +10,9 @@ internal class UserAttempt
 	public WordPosition WordPosition { get; }
 
 	public UserAttempt(Word inputWord,
-		bool isGuessed,
 		WordPosition wordPosition)
 	{
 		WordPosition = wordPosition;
 		InputWord = inputWord;
-		IsSuccessful = isGuessed;
 	}
 }

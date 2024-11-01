@@ -4,11 +4,11 @@ namespace GuessWordGames.Models.Components.Modules.WordPosition;
 
 public class GameWordsHandler
 {
-	private const int _belowPos = -1;
-	private const int _abovePos = 1;
-	private const int _equal = 0;
+	private const int BelowPos = -1;
+	private const int AbovePos = 1;
+	private const int Equal = 0;
 	private IRandomProvider _randomProvider;
-	public Word WordToGuess { get; }
+	private Word WordToGuess { get; }
 	public WordsCollection WordsToGuess { get; }
 
 	public GameWordsHandler(WordsCollection words, IRandomProvider randomProvider)
@@ -33,9 +33,9 @@ public class GameWordsHandler
 
 		return comparison switch
 		{
-			_belowPos => WordPosition.Below,
-			_abovePos => WordPosition.Above,
-			_equal => WordPosition.Equal,
+			BelowPos => WordPosition.Below,
+			AbovePos => WordPosition.Above,
+			Equal => WordPosition.Equal,
 			_ => WordPosition.NotFound
 		};
 	}

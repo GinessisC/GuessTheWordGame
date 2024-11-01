@@ -28,14 +28,14 @@ public class GuessWordGameTest
 		//Arrange
 		IUserInterface? userInterface = Substitute.For<IUserInterface>();
 		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
-		IGameMessagesDisplay? gameMessagesDisplayer = Substitute.For<IGameMessagesDisplay>();
+		IGameMessagesDisplay? gameMessagesDisplayed = Substitute.For<IGameMessagesDisplay>();
 		
 		ConfiguredCall? randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(NonGuessedWordIndex);
 		userInterface.GetWordsToGuess().Returns(_words);
 		userInterface.GetUserWordAttempt().Returns(_wordsValues[NonGuessedWordIndex]);
-		gameMessagesDisplayer.AskIsContinue().Returns(false);
+		gameMessagesDisplayed.AskIsContinue().Returns(false);
 
-		GuessGameSessionsHandler sessionsHandler = new(userInterface, gameMessagesDisplayer, randomProvider);
+		GuessGameSessionsHandler sessionsHandler = new(userInterface, gameMessagesDisplayed, randomProvider);
 
 		//Act
 
@@ -56,14 +56,14 @@ public class GuessWordGameTest
 		//Arrange
 		IUserInterface? userInterface = Substitute.For<IUserInterface>();
 		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
-		IGameMessagesDisplay? messagesDisplayer = Substitute.For<IGameMessagesDisplay>();
+		IGameMessagesDisplay? messagesDisplayed = Substitute.For<IGameMessagesDisplay>();
 
 		ConfiguredCall? randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(GuessedWordIndex);
 		userInterface.GetWordsToGuess().Returns(_words);
 		userInterface.GetUserWordAttempt().Returns(_wordsValues[GuessedWordIndex]);
-		messagesDisplayer.AskIsContinue().Returns(false);
+		messagesDisplayed.AskIsContinue().Returns(false);
 
-		GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayer, randomProvider);
+		GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayed, randomProvider);
 
 		//Act
 
@@ -84,23 +84,20 @@ public class GuessWordGameTest
 		//Arrange
 		IUserInterface? userInterface = Substitute.For<IUserInterface>();
 		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
-		IGameMessagesDisplay? messagesDisplayer = Substitute.For<IGameMessagesDisplay>();
+		IGameMessagesDisplay? messagesDisplayed = Substitute.For<IGameMessagesDisplay>();
 
 		ConfiguredCall? randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(GuessedWordIndex);
-		messagesDisplayer.AskIsContinue().Returns(false);
+		messagesDisplayed.AskIsContinue().Returns(false);
 		userInterface.GetWordsToGuess().Returns(_words);
 		userInterface.GetUserWordAttempt().Returns(_wordsValues[GuessedWordIndex]);
 
-		GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayer, randomProvider);
+		GuessGameSessionsHandler sessionsHandler = new(userInterface, messagesDisplayed, randomProvider);
 
 		//Act
 		sessionsHandler.SetUpGamePool();
 
 		//Assert
-		messagesDisplayer.Received(1).ShowGreetMessage();
-		messagesDisplayer.Received(1).ShowExitMessage();
-
-		//userInterface.Received(1).GetWordsToGuess();
-		//userInterface.Received(1).GetUserWordAttempt();
+		messagesDisplayed.Received(1).ShowGreetMessage();
+		messagesDisplayed.Received(1).ShowExitMessage();
 	}
 }

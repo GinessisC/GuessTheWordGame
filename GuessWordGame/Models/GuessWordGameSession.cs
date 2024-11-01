@@ -8,7 +8,7 @@ public class GuessWordGameSession
 {
 	private readonly IUserInterface _userInterface;
 	private readonly GameWordsHandler _gameWordsToGuess;
-	private readonly List<UserAttempt> userAttempts = new();
+	private readonly List<UserAttempt> _userAttempts = new();
 	private IRandomProvider _randomProvider;
 	private bool _isFinished;
 
@@ -32,18 +32,20 @@ public class GuessWordGameSession
 
 		while (_isFinished is false)
 		{
-			bool IsGuessed = TryGuess();
+			bool isGuessed = TryGuess();
 		}
 	}
 
 	private bool TryGuess()
 	{
-		WordsCollection userInputData = _gameWordsToGuess.WordsToGuess;
-		WordsCollection userWords = _gameWordsToGuess.WordsToGuess;
 		Word userWordInput = _userInterface.GetUserWordAttempt();
 		WordPosition wordPosition = _gameWordsToGuess.DefineWordPosition(userWordInput);
 
-		UserAttempt userAttempt = new(userWordInput, false, wordPosition);
+		UserAttempt userAttempt = new(userWordInput, wordPosition)
+		{
+			IsSuccessful = false
+		};
+		
 		DefineAction(wordPosition, userWordInput);
 
 		if (_gameWordsToGuess.IsGuessed(userWordInput))
@@ -51,7 +53,7 @@ public class GuessWordGameSession
 			userAttempt.IsSuccessful = true;
 		}
 
-		userAttempts.Add(userAttempt);
+		_userAttempts.Add(userAttempt);
 
 		return _isFinished;
 	}
@@ -74,41 +76,30 @@ public class GuessWordGameSession
 				break;
 			case WordPosition.Equal:
 				MakeOnEqual(inputWord);
-
 				break;
 			default:
 				throw new NotImplementedException();
 		}
-
-		;
 	}
 
 	private void MakeOnNotFound(Word inputWord)
 	{
-		UserAttempt userAttempt = new(inputWord, false, WordPosition.NotFound);
-		userAttempts.Add(userAttempt);
 		_userInterface.WhenWordIsNotFound(inputWord);
 	}
 
 	private void MakeOnBelow(Word inputWord)
 	{
-		UserAttempt userAttempt = new(inputWord, false, WordPosition.Below);
-		userAttempts.Add(userAttempt);
 		_userInterface.WhenWordIsBelow(inputWord);
 	}
 
 	private void MakeOnAbove(Word inputWord)
 	{
-		UserAttempt userAttempt = new(inputWord, false, WordPosition.Above);
-		userAttempts.Add(userAttempt);
 		_userInterface.WhenWordIsAbove(inputWord);
 	}
 
 	private void MakeOnEqual(Word inputWord)
 	{
 		_isFinished = true;
-		UserAttempt userAttempt = new(inputWord, true, WordPosition.Equal);
-		userAttempts.Add(userAttempt);
 		_userInterface.WhenWordIsGuessed(inputWord);
 	}
 }

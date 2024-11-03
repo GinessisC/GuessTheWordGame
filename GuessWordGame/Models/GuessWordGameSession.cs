@@ -8,14 +8,11 @@ public class GuessWordGameSession
 {
 	private readonly IUserInterface _userInterface;
 	private readonly GameWordsHandler _gameWordsToGuess;
-	private readonly List<UserAttempt> _userAttempts = new();
-	private IRandomProvider _randomProvider;
+	public readonly List<UserAttempt> UserAttempts = new();
 	private bool _isFinished;
 
 	public GuessWordGameSession(IUserInterface userInterface, IRandomProvider randomProvider)
 	{
-		_randomProvider = randomProvider;
-
 		WordsCollection words = userInterface.GetWordsToGuess();
 		_gameWordsToGuess = new GameWordsHandler(words, randomProvider);
 		_userInterface = userInterface;
@@ -23,16 +20,14 @@ public class GuessWordGameSession
 
 	public void LaunchGame()
 	{
-		GameProcess();
+		ProcessGame();
 	}
 
-	private void GameProcess()
+	private void ProcessGame()
 	{
-		string inputWord = string.Empty;
-
 		while (_isFinished is false)
 		{
-			bool isGuessed = TryGuess();
+			_isFinished = TryGuess();
 		}
 	}
 
@@ -46,60 +41,51 @@ public class GuessWordGameSession
 			IsSuccessful = false
 		};
 		
-		DefineAction(wordPosition, userWordInput);
+		var isWordGuessed = IsEqual(wordPosition, userWordInput);
 
 		if (_gameWordsToGuess.IsGuessed(userWordInput))
 		{
 			userAttempt.IsSuccessful = true;
 		}
 
-		_userAttempts.Add(userAttempt);
+		UserAttempts.Add(userAttempt);
 
-		return _isFinished;
+		return isWordGuessed;
 	}
 
-	private void DefineAction(WordPosition userWordPosition, Word inputWord)
+	private bool IsEqual(WordPosition userWordPosition, Word inputWord)
 	{
-		switch (userWordPosition)
+		return userWordPosition switch
 		{
-			case WordPosition.NotFound:
-				MakeOnNotFound(inputWord);
-
-				break;
-			case WordPosition.Above:
-				MakeOnAbove(inputWord);
-
-				break;
-			case WordPosition.Below:
-				MakeOnBelow(inputWord);
-
-				break;
-			case WordPosition.Equal:
-				MakeOnEqual(inputWord);
-				break;
-			default:
-				throw new NotImplementedException();
-		}
+			WordPosition.Above => MakeOnAbove(inputWord),
+			WordPosition.Below => MakeOnBelow(inputWord),
+			WordPosition.Equal => MakeOnEqual(inputWord),
+			WordPosition.NotFound => MakeOnNotFound(inputWord),
+			_ => throw new ArgumentOutOfRangeException(nameof(userWordPosition), userWordPosition, null)
+		};
 	}
 
-	private void MakeOnNotFound(Word inputWord)
+	private bool MakeOnNotFound(Word inputWord)
 	{
 		_userInterface.WhenWordIsNotFound(inputWord);
+		return false;
 	}
 
-	private void MakeOnBelow(Word inputWord)
+	private bool MakeOnBelow(Word inputWord)
 	{
 		_userInterface.WhenWordIsBelow(inputWord);
+		return false;
 	}
 
-	private void MakeOnAbove(Word inputWord)
+	private bool MakeOnAbove(Word inputWord)
 	{
 		_userInterface.WhenWordIsAbove(inputWord);
+		return false;
 	}
 
-	private void MakeOnEqual(Word inputWord)
+	private bool MakeOnEqual(Word inputWord)
 	{
-		_isFinished = true;
 		_userInterface.WhenWordIsGuessed(inputWord);
+		return true;
 	}
 }

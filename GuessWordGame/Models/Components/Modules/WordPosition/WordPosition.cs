@@ -2,8 +2,8 @@
 
 public enum WordPosition
 {
-	Above,
-	Below,
-	Equal,
-	NotFound
+	Above = 1,
+	Below = -1,
+	Equal = 0,
+	NotFound = 2
 }

@@ -3,7 +3,6 @@ using GuessWordGames.Interfaces;
 using GuessWordGames.Models;
 using GuessWordGames.Models.Components;
 using NSubstitute;
-using NSubstitute.Core;
 
 namespace GuessWordGame.Test;
 
@@ -56,7 +55,6 @@ public class GuessWordGameTest
 		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
 		IGameMessagesDisplay? messagesDisplayed = Substitute.For<IGameMessagesDisplay>();
 
-		ConfiguredCall? randomNum = randomProvider.Next(0, _wordsValues.Count - 1).Returns(GuessedWordIndex);
 		userInterface.GetWordsToGuess().Returns(_words);
 		userInterface.GetUserWordAttempt().Returns(_wordsValues[GuessedWordIndex]);
 		messagesDisplayed.AskIsContinue().Returns(false);

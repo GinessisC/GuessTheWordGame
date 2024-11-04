@@ -8,8 +8,9 @@ public class GuessWordGameSession
 {
 	private readonly IUserInterface _userInterface;
 	private readonly GameWordsHandler _gameWordsToGuess;
-	public readonly List<UserAttempt> UserAttempts = new();
+	private readonly List<UserAttempt> _userAttempts = new();
 	private bool _isFinished;
+	public IEnumerable<UserAttempt> Attempts => _userAttempts;
 
 	public GuessWordGameSession(IUserInterface userInterface, IRandomProvider randomProvider)
 	{
@@ -20,15 +21,8 @@ public class GuessWordGameSession
 
 	public void LaunchGame()
 	{
-		ProcessGame();
-	}
-
-	private void ProcessGame()
-	{
 		while (_isFinished is false)
-		{
 			_isFinished = TryGuess();
-		}
 	}
 
 	private bool TryGuess()
@@ -36,19 +30,16 @@ public class GuessWordGameSession
 		Word userWordInput = _userInterface.GetUserWordAttempt();
 		WordPosition wordPosition = _gameWordsToGuess.DefineWordPosition(userWordInput);
 
-		UserAttempt userAttempt = new(userWordInput, wordPosition)
+		bool isWordGuessed = IsEqual(wordPosition, userWordInput);
+
+		UserAttempt userAttempt = new()
 		{
-			IsSuccessful = false
+			WordPosition = wordPosition,
+			InputWord = userWordInput,
+			IsSuccessful = isWordGuessed
 		};
-		
-		var isWordGuessed = IsEqual(wordPosition, userWordInput);
 
-		if (_gameWordsToGuess.IsGuessed(userWordInput))
-		{
-			userAttempt.IsSuccessful = true;
-		}
-
-		UserAttempts.Add(userAttempt);
+		_userAttempts.Add(userAttempt);
 
 		return isWordGuessed;
 	}
@@ -68,24 +59,28 @@ public class GuessWordGameSession
 	private bool MakeOnNotFound(Word inputWord)
 	{
 		_userInterface.WhenWordIsNotFound(inputWord);
+
 		return false;
 	}
 
 	private bool MakeOnBelow(Word inputWord)
 	{
 		_userInterface.WhenWordIsBelow(inputWord);
+
 		return false;
 	}
 
 	private bool MakeOnAbove(Word inputWord)
 	{
 		_userInterface.WhenWordIsAbove(inputWord);
+
 		return false;
 	}
 
 	private bool MakeOnEqual(Word inputWord)
 	{
 		_userInterface.WhenWordIsGuessed(inputWord);
+
 		return true;
 	}
 }

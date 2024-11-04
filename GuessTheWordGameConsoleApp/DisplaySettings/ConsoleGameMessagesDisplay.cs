@@ -5,23 +5,10 @@ namespace GuessTheWordGameConsoleApp.DisplaySettings;
 internal class ConsoleGameMessagesDisplay : IGameMessagesDisplay
 {
 	private static readonly string _separator = ", ";
-
-	private static readonly string _greetMessage = $"""
-													   Hi! Welcome to the guess word game! 
-													   Enter words separated by coma ({_separator}) and program choose one random word
-
-													""";
-
-	private static readonly string _exitMessage = """
-												Thanks for playing, exiting...
-												""";
-
-	private static readonly string _askContinueMessage = "Continue? y/n\n";
-
 	public bool AskIsContinue()
 	{
-		Console.WriteLine(_askContinueMessage);
-		string isContinueStr = Console.ReadLine();
+		Console.WriteLine("Continue? y/n\n");
+		string isContinueStr = Console.ReadLine() ?? string.Empty;
 		Console.Clear();
 
 		return IsContinue(isContinueStr);
@@ -29,17 +16,23 @@ internal class ConsoleGameMessagesDisplay : IGameMessagesDisplay
 
 	public void ShowExitMessage()
 	{
-		Console.WriteLine(_exitMessage);
+		Console.WriteLine("""
+						Thanks for playing, exiting...
+						""");
 	}
 
 	public void ShowGreetMessage()
 	{
-		Console.WriteLine(_greetMessage);
+		Console.WriteLine($"""
+							   Hi! Welcome to the guess word game! 
+							   Enter words separated by coma ({_separator}) and program choose one random word
+
+							""");
 	}
 
-	private bool IsContinue(string userAnswere)
+	private bool IsContinue(string? userAnswer)
 	{
-		return userAnswere.Contains('y')
+		return userAnswer != null && userAnswer.Contains('y')
 			? true
 			: false;
 	}

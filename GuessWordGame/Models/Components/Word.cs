@@ -11,7 +11,7 @@ public class Word : IComparable<Word>
 
 	public int CompareTo(Word? other)
 	{
-		return string.Compare(_value, other._value, StringComparison.CurrentCultureIgnoreCase);
+		return string.Compare(_value, other?._value, StringComparison.CurrentCultureIgnoreCase);
 	}
 
 	public override string ToString()

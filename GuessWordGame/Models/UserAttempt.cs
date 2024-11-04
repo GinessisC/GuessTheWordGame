@@ -3,16 +3,9 @@ using GuessWordGames.Models.Components.Modules.WordPosition;
 
 namespace GuessWordGames.Models;
 
-public class UserAttempt
+public record UserAttempt
 {
-	public Word InputWord { get; }
-	public bool IsSuccessful { get; set; }
-	public WordPosition WordPosition { get; }
-
-	public UserAttempt(Word inputWord,
-		WordPosition wordPosition)
-	{
-		WordPosition = wordPosition;
-		InputWord = inputWord;
-	}
+	public required Word InputWord { get; init; }
+	public required bool IsSuccessful { get; init; }
+	public required WordPosition WordPosition { get; init; }
 }

@@ -4,22 +4,17 @@ namespace GuessWordGames.Models.Components.Modules.WordPosition;
 
 public class GameWordsHandler
 {
-	private const int BelowPos = -1;
-	private const int AbovePos = 1;
-	private const int Equal = 0;
-	
 	public Word WordToGuess { get; }
 	public WordsCollection WordsToGuess { get; }
 
 	public GameWordsHandler(WordsCollection words, IRandomProvider randomProvider)
 	{
-		
 		WordsToGuess = words;
 
-		int lastWordIndex = words.wordsList.Count - 1;
+		int lastWordIndex = words.Count - 1;
 		int randomIndexOfWordList = randomProvider.Next(0, lastWordIndex);
 
-		WordToGuess = words.wordsList[randomIndexOfWordList];
+		WordToGuess = words[randomIndexOfWordList];
 	}
 
 	public bool IsGuessed(Word word)
@@ -30,6 +25,7 @@ public class GameWordsHandler
 	public WordPosition DefineWordPosition(Word word)
 	{
 		int comparison = WordToGuess.CompareTo(word);
+
 		return (WordPosition) comparison;
 	}
 }

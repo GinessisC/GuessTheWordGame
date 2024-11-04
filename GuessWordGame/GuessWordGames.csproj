@@ -7,8 +7,8 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <Compile Remove="Interfaces\IWordPositionDisplayer.cs" />
-      <Compile Remove="Models\GuessGameSessionsHandler.cs" />
+        <Compile Remove="Interfaces\IWordPositionDisplayer.cs"/>
+        <Compile Remove="Models\GuessGameSessionsHandler.cs"/>
     </ItemGroup>
 
 </Project>

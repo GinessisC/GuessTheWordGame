@@ -2,27 +2,20 @@
 using GuessTheWordGameConsoleApp.DisplaySettings;
 using GuessWordGames.Models;
 
-var isContinue = true;
-
-void SetUpGamePool(ConsoleUserInterface userInterface,
-	RandomProvider randomProvider,
-	ConsoleGameMessagesDisplay consoleGameMessagesDisplay
-	)
-{
-	while (isContinue)
-	{
-		GuessWordGameSession game = new(userInterface, randomProvider);
-		game.LaunchGame();
-		
-		isContinue = consoleGameMessagesDisplay.AskIsContinue();
-	}
-}
+bool isContinue = true;
 
 ConsoleUserInterface consoleUserInterface = new();
 ConsoleGameMessagesDisplay display = new();
 RandomProvider randomProvider = new();
 
-
 display.ShowGreetMessage();
-SetUpGamePool(consoleUserInterface, randomProvider, display);
+
+while (isContinue)
+{
+	GuessWordGameSession game = new(consoleUserInterface, randomProvider);
+	game.LaunchGame();
+
+	isContinue = display.AskIsContinue();
+}
+
 display.ShowExitMessage();

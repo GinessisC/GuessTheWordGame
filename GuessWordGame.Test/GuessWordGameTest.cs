@@ -29,12 +29,12 @@ public class GuessWordGameTest
 		IUserInterface? userInterface = Substitute.For<IUserInterface>();
 		IRandomProvider? randomProvider = Substitute.For<IRandomProvider>();
 		IGameMessagesDisplay? gameMessagesDisplayed = Substitute.For<IGameMessagesDisplay>();
-		
+
 		randomProvider.Next(0, _wordsValues.Count - 1).Returns(NonGuessedWordIndex);
 		userInterface.GetWordsToGuess().Returns(_words);
 		userInterface.GetUserWordAttempt().Returns(_wordsValues[NonGuessedWordIndex]);
 		gameMessagesDisplayed.AskIsContinue().Returns(false);
-		
+
 		GuessWordGameSession session = new(userInterface, randomProvider);
 
 		//Act
@@ -60,7 +60,7 @@ public class GuessWordGameTest
 		userInterface.GetWordsToGuess().Returns(_words);
 		userInterface.GetUserWordAttempt().Returns(_wordsValues[GuessedWordIndex]);
 		messagesDisplayed.AskIsContinue().Returns(false);
-		 
+
 		GuessWordGameSession session = new(userInterface, randomProvider);
 
 		//Act

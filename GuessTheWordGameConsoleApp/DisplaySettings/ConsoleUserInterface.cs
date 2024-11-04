@@ -5,7 +5,7 @@ namespace GuessTheWordGameConsoleApp.DisplaySettings;
 
 internal class ConsoleUserInterface : IUserInterface
 {
-	private readonly string _separator = ", ";
+	private const string Separator = ", ";
 
 	public void WhenWordIsAbove(Word userWord)
 	{
@@ -24,7 +24,7 @@ internal class ConsoleUserInterface : IUserInterface
 
 	public void WhenWordIsGuessed(Word userWord)
 	{
-		Console.WriteLine($"\nCongritulations!!! Right word was guessed! It was {userWord}\n");
+		Console.WriteLine($"\nCongratulations!!! Right word was guessed! It was {userWord}\n");
 	}
 
 	public WordsCollection GetWordsToGuess()
@@ -37,24 +37,16 @@ internal class ConsoleUserInterface : IUserInterface
 	public Word GetUserWordAttempt()
 	{
 		Console.WriteLine("Enter word >>>");
-		string wordValue = Console.ReadLine();
+		string wordValue = Console.ReadLine() ?? string.Empty;
 		Word inputWord = new(wordValue);
 
 		return inputWord;
 	}
 
-	public void Greet()
-	{
-		Console.WriteLine("""
-						   Hi! Welcome to the guess word game! 
-						   Enter words separated by coma (, ) and program choose one random word
-						""");
-	}
-
-	public List<Word> GetUserWordsToGuess()
+	private List<Word> GetUserWordsToGuess()
 	{
 		Console.WriteLine("Enter wordsList that you what to guess: ");
-		string words = Console.ReadLine();
+		string words = Console.ReadLine() ?? string.Empty;
 		List<Word> wordsList = ConvertWordsToList(words);
 
 		return wordsList;
@@ -62,7 +54,7 @@ internal class ConsoleUserInterface : IUserInterface
 
 	private List<Word> ConvertWordsToList(string words)
 	{
-		string[] wordsArray = words.Split(_separator);
+		string[] wordsArray = words.Split(Separator);
 		List<Word> wordsList = new();
 
 		foreach (string strWord in wordsArray)
